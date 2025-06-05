@@ -1,7 +1,8 @@
-const axios = require('axios');
-const fs = require('fs');
+import axios from 'axios';
+import { writeFileSync } from 'fs';
+import { argv, exit } from 'process';
 
-class YouTubePlaylistExtractor {
+export default class YouTubePlaylistExtractor {
     constructor(apiKey) {
         this.apiKey = apiKey;
         this.baseUrl = 'https://www.googleapis.com/youtube/v3';
@@ -33,7 +34,7 @@ class YouTubePlaylistExtractor {
                 const response = await axios.get(`${this.baseUrl}/playlistItems`, {
                     params: {
                         key: this.apiKey,
-                        playlistId: playlistId,
+                        playlistId,
                         part: 'snippet',
                         maxResults: 50, // Max allowed by API
                         pageToken: nextPageToken
@@ -43,7 +44,7 @@ class YouTubePlaylistExtractor {
                 const items = response.data.items || [];
                 
                 for (const item of items) {
-                    const snippet = item.snippet;
+                    const { snippet } = item;
                     
                     // Skip deleted/private videos
                     if (snippet.title === 'Private video' || snippet.title === 'Deleted video') {
@@ -116,7 +117,7 @@ class YouTubePlaylistExtractor {
             const playlistId = this.extractPlaylistId(playlistUrl);
             console.log(`📋 Playlist ID: ${playlistId}`);
 
-            let result = {};
+            const result = {};
 
             if (includeMetadata) {
                 console.log('📊 Fetching playlist metadata...');
@@ -160,7 +161,7 @@ class YouTubePlaylistExtractor {
                 throw new Error('Unsupported format. Use json, csv, or txt');
         }
 
-        fs.writeFileSync(filename, content, 'utf8');
+        writeFileSync(filename, content, 'utf8');
     }
 
     // Convert to CSV format
@@ -190,7 +191,7 @@ class YouTubePlaylistExtractor {
         }
 
         text += 'Videos:\n';
-        text += '=' .repeat(50) + '\n\n';
+        text += '='.repeat(50) + '\n\n';
 
         data.videos.forEach((video, index) => {
             text += `${index + 1}. ${video.title}\n`;
@@ -203,10 +204,10 @@ class YouTubePlaylistExtractor {
     }
 }
 
-// CLI Usage Example
-async function main() {
+// CLI Usage Function
+const main = async () => {
     // Get command line arguments
-    const args = process.argv.slice(2);
+    const args = argv.slice(2);
     
     if (args.length < 2) {
         console.log(`
@@ -228,23 +229,22 @@ Examples:
   node playlist-extractor.js YOUR_API_KEY PLrAXtmRdnEQy --output results.json
   node playlist-extractor.js YOUR_API_KEY PLrAXtmRdnEQy --format csv --output playlist.csv
         `);
-        process.exit(1);
+        exit(1);
     }
 
-    const apiKey = args[0];
-    const playlistUrl = args[1];
+    const [apiKey, playlistUrl, ...optionArgs] = args;
     
     // Parse options
     const options = {};
-    for (let i = 2; i < args.length; i++) {
-        switch (args[i]) {
+    for (let i = 0; i < optionArgs.length; i++) {
+        switch (optionArgs[i]) {
             case '--output':
             case '-o':
-                options.outputFile = args[++i];
+                options.outputFile = optionArgs[++i];
                 break;
             case '--format':
             case '-f':
-                options.format = args[++i];
+                options.format = optionArgs[++i];
                 break;
             case '--no-metadata':
                 options.includeMetadata = false;
@@ -262,14 +262,11 @@ Examples:
         }
     } catch (error) {
         console.error('❌ Failed to extract playlist:', error.message);
-        process.exit(1);
+        exit(1);
     }
-}
+};
 
-// Export for use as module
-module.exports = YouTubePlaylistExtractor;
-
-// Run if called directly
-if (require.main === module) {
+// Run if this is the main module
+if (import.meta.url === `file://${argv[1]}`) {
     main();
 }

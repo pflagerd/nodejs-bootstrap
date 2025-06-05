@@ -1,17 +1,15 @@
 {
-  "name": "express-template",
+  "name": "nodejs-bootstrap",
   "version": "1.0.0",
-  "description": "Local development HTTPS server with static file serving and auto-reload.",
+  "description": "Bootstrap template for stand-alone Node.js program",
   "type": "module",
-  "main": "express-template.mjs",
+  "main": "index.js",
   "scripts": {
-    "start": "node express-template.mjs"
+    "start": "node index.mjs"
   },
   "author": "Code GPT",
   "license": "MIT",
   "dependencies": {
-    "chokidar": "^3.5.3",
-    "express": "^4.18.2",
-    "ws": "^8.13.0"
+    "axios": "^1.9.0"
   }
 }
