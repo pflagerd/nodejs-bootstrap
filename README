@@ -1,0 +1,6 @@
+Get the playlist using Chrome, navigate to YouTube, find your playlist, copy its url by right clicking and saving link.
+
+Use the link as follows:
+    ./RUNME https://www.youtube.com/watch?v=RYT08CaYq6A&list=PL3Nwo-Zml5oaWiBHo-wdBm5LBbI1TUDDP&pp=gAQB
+
+Due to naming restrictions in Google Cloud, this project is called youtube-playlist-video-urls (https://console.cloud.google.com/welcome?inv=1&invt=AbzUwQ&project=youtube-playlist-video-urls)
