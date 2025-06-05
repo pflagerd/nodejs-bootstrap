@@ -2,6 +2,6 @@
 pushd $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) >/dev/null
 source ./SETMEUP
 
-python -m unittest ./problem.py
+echo node index.js "$@"
 
 popd >/dev/null

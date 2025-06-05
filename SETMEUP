@@ -1,2 +1,12 @@
 #!/bin/bash
-which python >/dev/null 2>&1 || (echo "python 3 must be installed to use this script" && exit 1)
+
+pushd $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) >/dev/null
+
+which node >/dev/null 2>&1 || (echo "Node.js (node) must be installed to use this script" && exit 1)
+which npm >/dev/null 2>&1 || (echo "npm must be installed to use this script" && exit 1)
+
+if ! [ -e node_modules ]; then # add logic to check if package.json is newer than node_modules
+    npm install axios
+fi
+
+popd >/dev/null
