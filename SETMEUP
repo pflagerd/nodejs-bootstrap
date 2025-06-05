@@ -1,0 +1,2 @@
+#!/bin/bash
+which python >/dev/null 2>&1 || (echo "python 3 must be installed to use this script" && exit 1)
