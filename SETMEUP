@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd $(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd) >/dev/null
+pushd "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" >/dev/null
 
 which node >/dev/null 2>&1 || (echo "Node.js (node) must be installed to use this script" && exit 1)
 which npm >/dev/null 2>&1 || (echo "npm must be installed to use this script" && exit 1)
